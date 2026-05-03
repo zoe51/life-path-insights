@@ -8,35 +8,53 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Numen — cream base, midnight ink, electric brand blue #0100FB */
+    --background: 40 33% 96%;        /* warm cream */
+    --foreground: 230 60% 10%;       /* midnight ink */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 40 33% 98%;
+    --card-foreground: 230 60% 10%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 40 33% 98%;
+    --popover-foreground: 230 60% 10%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 240 99% 49%;          /* #0100FB */
+    --primary-foreground: 40 33% 97%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 230 40% 14%;        /* deep night blue */
+    --secondary-foreground: 40 33% 97%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 40 20% 90%;
+    --muted-foreground: 230 20% 38%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 240 99% 49%;
+    --accent-foreground: 40 33% 97%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 40 33% 97%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 230 25% 86%;
+    --input: 230 25% 86%;
+    --ring: 240 99% 49%;
 
-    --radius: 0.5rem;
+    --radius: 0.25rem;
+
+    /* Brand tokens */
+    --ink: 230 60% 10%;
+    --cream: 40 33% 96%;
+    --brand: 240 99% 49%;
+    --brand-soft: 240 80% 92%;
+
+    --gradient-cosmic: radial-gradient(ellipse at 20% 0%, hsl(var(--brand) / 0.12), transparent 55%),
+                       radial-gradient(ellipse at 80% 100%, hsl(230 60% 10% / 0.08), transparent 60%);
+    --gradient-night: linear-gradient(160deg, hsl(230 60% 8%), hsl(240 50% 14%));
+    --shadow-soft: 0 1px 2px hsl(230 60% 10% / 0.04), 0 8px 30px -10px hsl(230 60% 10% / 0.12);
+    --shadow-glow: 0 0 0 1px hsl(var(--brand) / 0.15), 0 20px 60px -20px hsl(var(--brand) / 0.4);
+
+    --font-display: "Cormorant Garamond", "Noto Serif SC", ui-serif, Georgia, serif;
+    --font-body: "Inter", "Noto Serif SC", ui-sans-serif, system-ui, sans-serif;
+
+    --transition-smooth: cubic-bezier(0.22, 1, 0.36, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -56,17 +74,15 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 230 50% 6%;
+    --foreground: 40 33% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --card: 230 50% 9%;
+    --card-foreground: 40 33% 95%;
+    --popover: 230 50% 9%;
+    --popover-foreground: 40 33% 95%;
+    --primary: 240 99% 62%;
+    --primary-foreground: 230 50% 6%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -101,5 +117,58 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .bg-cosmic { background-image: var(--gradient-cosmic); }
+  .bg-night { background-image: var(--gradient-night); }
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+
+  .grain {
+    position: relative;
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  @keyframes float-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-float-up { animation: float-up 0.7s var(--transition-smooth) both; }
+
+  @keyframes breathe {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+  }
+  .animate-breathe { animation: breathe 4s ease-in-out infinite; }
+
+  @keyframes spin-slow {
+    to { transform: rotate(360deg); }
+  }
+  .animate-spin-slow { animation: spin-slow 40s linear infinite; }
+}
+
+@layer base {
+  ::selection {
+    background: hsl(var(--brand));
+    color: hsl(var(--cream));
   }
 }
